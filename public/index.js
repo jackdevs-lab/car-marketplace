@@ -107,6 +107,9 @@ async function renderCarListings() {
 
   try {
     const response = await fetch(API_URL);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}, text: ${await response.text()}`);
+    }
     const cars = await response.json();
     carListing.innerHTML = '';
 
@@ -156,6 +159,9 @@ async function renderCarListings() {
 async function showCarDetail(carId) {
   try {
     const response = await fetch(`${API_URL}/${carId}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}, text: ${await response.text()}`);
+    }
     const car = await response.json();
 
     currentCarId = carId;
@@ -183,7 +189,10 @@ async function showCarDetail(carId) {
 function changeImage(direction) {
   if (!currentCarId || !detailCarImage) return;
   fetch(`${API_URL}/${currentCarId}`)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return response.json();
+    })
     .then(car => {
       const totalImages = car.images.length;
       if (totalImages === 0) {

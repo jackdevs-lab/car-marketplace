@@ -65,6 +65,7 @@ const authMiddleware = (req, res, next) => {
 app.get('/api/cars', async (req, res) => {
   try {
     const cars = await prisma.car.findMany();
+    console.log('Fetched cars:', cars); // Add log to verify data
     res.json(cars);
   } catch (error) {
     console.error('Error fetching cars:', error);
