@@ -6,6 +6,14 @@ const path = require('path');
 const { PrismaClient } = require('@prisma/client');
 const multer = require('multer');
 const session = require('express-session');
+const cloudinary = require('cloudinary').v2;
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const prisma = new PrismaClient();
 const port = process.env.PORT || 5000;
@@ -24,18 +32,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Static file serving
-app.use(express.static(path.join(__dirname, 'car-marketplace')));
+app.use(express.static(path.join(__dirname)));
 
-// Multer configuration for image uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  }
+// Root route to serve index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
-const upload = multer({ storage });
+
+// Multer configuration for temporary file storage
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Admin authentication middleware
 const authMiddleware = (req, res, next) => {
@@ -71,7 +76,17 @@ app.get('/api/cars/:id', async (req, res) => {
 app.post('/api/cars', upload.array('images', 10), async (req, res) => {
   try {
     const { name, brand, price, mileage, year, color, description, phone, transmission, engine } = req.body;
-    const images = req.files.map(file => `/uploads/${file.filename}`);
+
+    const uploadPromises = req.files.map(file =>
+      new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+          if (error) reject(new Error('Cloudinary upload failed'));
+          resolve(result.secure_url);
+        }).end(file.buffer);
+      })
+    );
+
+    const imageUrls = await Promise.all(uploadPromises);
 
     const car = await prisma.car.create({
       data: {
@@ -85,7 +100,7 @@ app.post('/api/cars', upload.array('images', 10), async (req, res) => {
         phone,
         transmission,
         engine,
-        images,
+        images: imageUrls,
       },
     });
     res.status(201).json(car);
@@ -99,7 +114,19 @@ app.put('/api/cars/:id', upload.array('images', 10), async (req, res) => {
   try {
     const { id } = req.params;
     const { name, brand, price, mileage, year, color, description, phone, transmission, engine } = req.body;
-    const images = req.files ? req.files.map(file => `/uploads/${file.filename}`) : undefined;
+
+    let imageUrls;
+    if (req.files && req.files.length > 0) {
+      const uploadPromises = req.files.map(file =>
+        new Promise((resolve, reject) => {
+          cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+            if (error) reject(new Error('Cloudinary upload failed'));
+            resolve(result.secure_url);
+          }).end(file.buffer);
+        })
+      );
+      imageUrls = await Promise.all(uploadPromises);
+    }
 
     const car = await prisma.car.update({
       where: { id: parseInt(id) },
@@ -114,7 +141,7 @@ app.put('/api/cars/:id', upload.array('images', 10), async (req, res) => {
         phone,
         transmission,
         engine,
-        images: images || undefined,
+        images: imageUrls || undefined,
       },
     });
     res.json(car);
@@ -137,7 +164,7 @@ app.delete('/api/cars/:id', async (req, res) => {
 
 // Login Route
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'car-marketplace', 'login.html'));
+  res.sendFile(path.join(__dirname, 'login.html'));
 });
 
 app.post('/login', express.urlencoded({ extended: true }), (req, res) => {
@@ -158,8 +185,14 @@ app.get('/logout', (req, res) => {
 
 // Admin Route
 app.get('/admin', authMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, 'car-marketplace', 'admin.html'));
+  res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Start Server
-module.exports=app;
+// Start server locally, export for Vercel
+if (!process.env.VERCEL) {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
+
+module.exports = app;
