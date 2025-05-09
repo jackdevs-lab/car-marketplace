@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoElite - Admin Panel</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .admin-panel {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .admin-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-danger {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .cars-list {
+            margin-top: 2rem;
+        }
+
+        .car-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .car-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .car-list-info h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .car-list-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem;
+        }
+
+        .mt-3 {
+            margin-top: 1rem;
+        }
+
+        .logout-link {
+            display: block;
+            text-align: right;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="admin-panel">
+            <a href="/logout" class="logout-link">Logout</a>
+            <h2 class="admin-title">Admin Dashboard</h2>
+            <form id="carForm">
+                <div class="form-group">
+                    <label for="carName" class="form-label">Car Name</label>
+                    <input type="text" id="carName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="carBrand" class="form-label">Brand</label>
+                    <select id="carBrand" class="form-control" required>
+                        <option value="">Select Brand</option>
+                        <option value="Toyota">Toyota</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Ford">Ford</option>
+                        <option value="BMW">BMW</option>
+                        <option value="Mercedes">Mercedes</option>
+                        <option value="Audi">Audi</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="carPrice" class="form-label">Price ($)</label>
+                    <input type="number" id="carPrice" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="carMileage" class="form-label">Mileage</label>
+                    <input type="text" id="carMileage" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="carYear" class="form-label">Year</label>
+                    <input type="number" id="carYear" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="carColor" class="form-label">Color</label>
+                    <input type="text" id="carColor" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="carDescription" class="form-label">Description</label>
+                    <textarea id="carDescription" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="carImages" class="form-label">Images (up to 10)</label>
+                    <input type="file" id="carImages" class="form-control" accept="image/*" multiple>
+                </div>
+                <div class="form-group">
+                    <label for="sellerPhone" class="form-label">Seller Phone</label>
+                    <input type="tel" id="sellerPhone" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Car</button>
+            </form>
+
+            <div class="cars-list">
+                <h3 class="admin-title">Manage Cars</h3>
+                <div id="carsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carForm = document.getElementById('carForm');
+            const carsList = document.getElementById('carsList');
+            const API_URL = '/api/cars';
+
+            if (!carForm || !carsList) {
+                console.error('carForm or carsList not found in DOM');
+                return;
+            }
+
+            function initAdmin() {
+                renderAdminCarList();
+                setupAdminEventListeners();
+            }
+
+            function setupAdminEventListeners() {
+                carForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const editId = carForm.dataset.editId;
+                    if (editId) {
+                        await updateCar(parseInt(editId));
+                    } else {
+                        await addNewCar();
+                    }
+                });
+            }
+
+            async function renderAdminCarList() {
+                try {
+                    const response = await fetch(API_URL);
+                    const cars = await response.json();
+                    carsList.innerHTML = '';
+
+                    cars.forEach(car => {
+                        const carItem = document.createElement('div');
+                        carItem.className = 'car-list-item';
+                        carItem.innerHTML = `
+                            <div class="car-list-info">
+                                <h4>${car.name}</h4>
+                                <p>$${car.price.toLocaleString()} | ${car.brand}</p>
+                            </div>
+                            <div class="car-list-actions">
+                                <button class="btn btn-primary edit-btn" data-car-id="${car.id}">Edit</button>
+                                <button class="btn btn-danger delete-btn" data-car-id="${car.id}">Delete</button>
+                            </div>
+                        `;
+                        carsList.appendChild(carItem);
+                    });
+
+                    document.querySelectorAll('.edit-btn').forEach(button => {
+                        button.addEventListener('click', () => {
+                            const carId = parseInt(button.getAttribute('data-car-id'));
+                            editCar(carId);
+                        });
+                    });
+
+                    document.querySelectorAll('.delete-btn').forEach(button => {
+                        button.addEventListener('click', () => {
+                            const carId = parseInt(button.getAttribute('data-car-id'));
+                            deleteCar(carId);
+                        });
+                    });
+                } catch (error) {
+                    console.error('Error fetching cars:', error);
+                    carsList.innerHTML = '<p class="text-center">Error loading cars.</p>';
+                }
+            }
+
+            async function addNewCar() {
+                const formData = new FormData();
+                formData.append('name', document.getElementById('carName').value);
+                formData.append('brand', document.getElementById('carBrand').value);
+                formData.append('price', document.getElementById('carPrice').value);
+                formData.append('mileage', document.getElementById('carMileage').value);
+                formData.append('year', document.getElementById('carYear').value);
+                formData.append('color', document.getElementById('carColor').value);
+                formData.append('description', document.getElementById('carDescription').value);
+                formData.append('phone', document.getElementById('sellerPhone').value);
+                formData.append('transmission', 'Automatic');
+                formData.append('engine', '2.0L');
+                const imageFiles = document.getElementById('carImages').files;
+                console.log('Image files:', imageFiles);
+                if (imageFiles.length > 0) {
+                    for (let file of imageFiles) {
+                        formData.append('images', file);
+                        console.log('Appending file:', file.name);
+                    }
+                } else {
+                    console.log('No image files selected');
+                }
+
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const result = await response.json();
+                    if (response.ok) {
+                        carForm.reset();
+                        await renderAdminCarList();
+                        console.log('Car created successfully:', result);
+                    } else {
+                        console.error('API Error:', response.status, result);
+                        alert('Error adding car: ' + (result.error || 'Unknown error'));
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    alert('Error adding car: Failed to fetch');
+                }
+            }
+
+            async function editCar(carId) {
+                try {
+                    const response = await fetch(`${API_URL}/${carId}`);
+                    const car = await response.json();
+
+                    document.getElementById('carName').value = car.name;
+                    document.getElementById('carBrand').value = car.brand;
+                    document.getElementById('carPrice').value = car.price;
+                    document.getElementById('carMileage').value = car.mileage;
+                    document.getElementById('carYear').value = car.year;
+                    document.getElementById('carColor').value = car.color;
+                    document.getElementById('carDescription').value = car.description;
+                    document.getElementById('sellerPhone').value = car.phone;
+
+                    carForm.dataset.editId = carId;
+                    carForm.querySelector('button[type="submit"]').textContent = 'Update Car';
+                } catch (error) {
+                    console.error('Error fetching car for edit:', error);
+                    alert('Error loading car data');
+                }
+            }
+
+            async function updateCar(carId) {
+                const formData = new FormData();
+                formData.append('name', document.getElementById('carName').value);
+                formData.append('brand', document.getElementById('carBrand').value);
+                formData.append('price', document.getElementById('carPrice').value);
+                formData.append('mileage', document.getElementById('carMileage').value);
+                formData.append('year', document.getElementById('carYear').value);
+                formData.append('color', document.getElementById('carColor').value);
+                formData.append('description', document.getElementById('carDescription').value);
+                formData.append('phone', document.getElementById('sellerPhone').value);
+                formData.append('transmission', 'Automatic');
+                formData.append('engine', '2.0L');
+                const imageFiles = document.getElementById('carImages').files;
+                if (imageFiles.length > 0) {
+                    for (let file of imageFiles) {
+                        formData.append('images', file);
+                    }
+                }
+
+                try {
+                    const response = await fetch(`${API_URL}/${carId}`, {
+                        method: 'PUT',
+                        body: formData
+                    });
+                    if (response.ok) {
+                        carForm.reset();
+                        carForm.querySelector('button[type="submit"]').textContent = 'Add Car';
+                        carForm.removeAttribute('data-editId');
+                        await renderAdminCarList();
+                    } else {
+                        const result = await response.json();
+                        console.error('API Error:', response.status, result);
+                        alert('Error updating car: ' + (result.error || 'Unknown error'));
+                    }
+                } catch (error) {
+                    console.error('Error updating car:', error);
+                    alert('Error updating car: ' + error.message);
+                }
+            }
+
+            async function deleteCar(carId) {
+                if (confirm('Are you sure you want to delete this car?')) {
+                    try {
+                        const response = await fetch(`${API_URL}/${carId}`, {
+                            method: 'DELETE'
+                        });
+                        if (response.ok) {
+                            await renderAdminCarList();
+                        } else {
+                            const result = await response.json();
+                            console.error('API Error:', response.status, result);
+                            alert('Error deleting car: ' + (result.error || 'Unknown error'));
+                        }
+                    } catch (error) {
+                        console.error('Error deleting car:', error);
+                        alert('Error deleting car: ' + error.message);
+                    }
+                }
+            }
+
+            initAdmin();
+        });
+    </script>
+</body>
+</html>

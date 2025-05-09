@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoElite - Premium Cars</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">Auto<span>Elite</span></a>
+        <nav>
+            <ul>
+                <li><a href="/" id="homeLink">Home</a></li>
+                <li><a href="/" id="carsLink">Cars</a></li>
+                <li><a href="/" id="contactLink">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div id="mainContent">
+            <div class="filters">
+                <div class="filter-group">
+                    <h3>Brand</h3>
+                    <div class="brand-grid">
+                        <div class="brand-card selected" data-brand="All">
+                            <span>All Brands</span>
+                        </div>
+                        <div class="brand-card" data-brand="Toyota">
+                            <img src="/images/toyota.png" alt="Toyota">
+                        </div>
+                        <div class="brand-card" data-brand="Honda">
+                            <img src="/images/honda.png" alt="Honda">
+                        </div>
+                        <div class="brand-card" data-brand="Ford">
+                            <img src="/images/ford.png" alt="Ford">
+                        </div>
+                        <div class="brand-card" data-brand="BMW">
+                            <img src="/images/bmw.png" alt="BMW">
+                        </div>
+                        <div class="brand-card" data-brand="Mercedes">
+                            <img src="/images/mercedes.png" alt="Mercedes">
+                        </div>
+                        <div class="brand-card" data-brand="Audi">
+                            <img src="/images/audi.png" alt="Audi">
+                        </div>
+                    </div>
+                </div><br>
+                <div class="filter-group">
+                    <h3>Price Range</h3>
+                    <select id="priceDropdown" class="price-dropdown">
+                        <option value="10000000">All Prices</option>
+                        <option value="1000000">< $1,000,000</option>
+                        <option value="2000000">< $2,000,000</option>
+                        <option value="3000000">< $3,000,000</option>
+                        <option value="4000000">< $4,000,000</option>
+                        <option value="5000000">< $5,000,000</option>
+                        <option value="6000000">< $6,000,000</option>
+                        <option value="7000000">< $7,000,000</option>
+                        <option value="8000000">< $8,000,000</option>
+                        <option value="9000000">< $9,000,000</option>
+                        <option value="10000000">< $10,000,000</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="carListing" class="cars-grid">
+                <!-- Cars will be dynamically loaded here -->
+            </div>
+
+            <div id="carDetailView" class="hidden">
+                <button id="backToList" class="btn btn-primary mb-3">Back to Listings</button>
+                <div class="car-detail-container">
+                    <div class="detail-slider">
+                        <button class="slider-prev"><</button>
+                        <div class="slider-container">
+                            <img src="" alt="Car Image" class="car-image-large" id="detailCarImage">
+                        </div>
+                        <button class="slider-next">></button>
+                    </div>
+                    <div class="car-info">
+                        <div class="car-header">
+                            <h1 class="car-name" id="detailCarName">Car Name</h1>
+                            <div class="detail-price" id="detailPrice">$0</div>
+                        </div>
+                        <div class="car-meta">
+                            <span id="detailBrand">Brand</span>
+                            <span id="detailYear">Year</span>
+                        </div>
+                        <p class="car-description" id="detailDescription">
+                            Car description goes here.
+                        </p>
+                        <div class="specs-grid">
+                            <div class="spec-item">
+                                <div class="spec-title">Mileage</div>
+                                <div class="spec-value" id="detailMileage">0 mi</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-title">Color</div>
+                                <div class="spec-value" id="detailColor">Color</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-title">Transmission</div>
+                                <div class="spec-value" id="detailTransmission">Automatic</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-title">Engine</div>
+                                <div class="spec-value" id="detailEngine">2.0L</div>
+                            </div>
+                        </div>
+                        <div class="seller-info">
+                            <h3 class="seller-title">Seller Information</h3>
+                            <div class="seller-phone" id="sellerPhone">+1 (123) 456-7890</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/index.js"></script>
+</body>
+</html>
