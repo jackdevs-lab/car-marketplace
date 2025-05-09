@@ -8,6 +8,9 @@ const multer = require('multer');
 const session = require('express-session');
 const cloudinary = require('cloudinary').v2;
 
+// Log server startup
+console.log('Starting server...');
+
 // Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -31,12 +34,19 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static file serving
-app.use(express.static(path.join(__dirname)));
+// Log incoming requests
+app.use((req, res, next) => {
+  console.log(`Received request: ${req.method} ${req.url}`);
+  next();
+});
+
+// Static file serving from public directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Root route to serve index.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  console.log('Serving index.html');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Multer configuration for temporary file storage
@@ -45,6 +55,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 // Admin authentication middleware
 const authMiddleware = (req, res, next) => {
   if (!req.session.isAdmin) {
+    console.log('User not authenticated, redirecting to login');
     return res.redirect('/login');
   }
   next();
@@ -56,6 +67,7 @@ app.get('/api/cars', async (req, res) => {
     const cars = await prisma.car.findMany();
     res.json(cars);
   } catch (error) {
+    console.error('Error fetching cars:', error);
     res.status(500).json({ error: 'Error fetching cars' });
   }
 });
@@ -69,6 +81,7 @@ app.get('/api/cars/:id', async (req, res) => {
       res.status(404).json({ error: 'Car not found' });
     }
   } catch (error) {
+    console.error('Error fetching car:', error);
     res.status(500).json({ error: 'Error fetching car' });
   }
 });
@@ -164,28 +177,39 @@ app.delete('/api/cars/:id', async (req, res) => {
 
 // Login Route
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'login.html'));
+  console.log('Serving login.html');
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 app.post('/login', express.urlencoded({ extended: true }), (req, res) => {
   const { username, password } = req.body;
   if (username === 'admin' && password === 'admin123') {
     req.session.isAdmin = true;
+    console.log('Login successful, redirecting to admin');
     res.redirect('/admin');
   } else {
+    console.log('Login failed: Invalid credentials');
     res.status(401).send('Invalid credentials');
   }
 });
 
 app.get('/logout', (req, res) => {
   req.session.destroy(() => {
+    console.log('Logged out, redirecting to login');
     res.redirect('/login');
   });
 });
 
 // Admin Route
 app.get('/admin', authMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin.html'));
+  console.log('Serving admin.html');
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Global error:', err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
 });
 
 // Start server locally, export for Vercel
