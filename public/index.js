@@ -166,7 +166,7 @@ async function showCarDetail(carId) {
 
     currentCarId = carId;
     document.querySelector('.car-name').textContent = car.name;
-    document.querySelector('.detail-price').textContent = `$${car.price.toLocaleString()}`;
+    document.querySelector('.detail-price').textContent = `Ksh${car.price.toLocaleString()}`;
     document.getElementById('detailBrand').textContent = car.brand;
     document.getElementById('detailYear').textContent = car.year;
     document.getElementById('detailDescription').textContent = car.description;
