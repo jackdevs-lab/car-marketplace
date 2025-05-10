@@ -130,7 +130,7 @@ async function renderCarListings() {
         <img src="${car.images[0]}" alt="${car.name}" class="car-image">
         <div class="car-details">
           <h3 class="car-title">${car.name}</h3>
-          <div class="car-price">$${car.price.toLocaleString()}</div>
+          <div class="car-price">Ksh${car.price.toLocaleString()}</div>
           <div class="car-specs">
             <div class="car-spec"><i class="fas fa-tachometer-alt"></i> ${car.mileage}</div>
             <div class="car-spec"><i class="fas fa-calendar-alt"></i> ${car.year}</div>
