@@ -36,7 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Log incoming requests
 app.use((req, res, next) => {
-  console.log(`Received request: Ksh{req.method} Ksh{req.url}`);
+  console.log(`Received request: ${req.method} ${req.url}`);
   next();
 });
 
@@ -216,7 +216,7 @@ app.use((err, req, res, next) => {
 // Start server locally, export for Vercel
 if (!process.env.VERCEL) {
   app.listen(port, () => {
-    console.log(`Server running on port Ksh{port}`);
+    console.log(`Server running on port ${port}`);
   });
 }
 
