@@ -173,7 +173,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="carPrice" class="form-label">Price ($)</label>
+                    <label for="carPrice" class="form-label">Price (Ksh)</label>
                     <input type="number" id="carPrice" class="form-control" required>
                 </div>
                 <div class="form-group">
@@ -249,12 +249,12 @@
                         carItem.className = 'car-list-item';
                         carItem.innerHTML = `
                             <div class="car-list-info">
-                                <h4>${car.name}</h4>
-                                <p>$${car.price.toLocaleString()} | ${car.brand}</p>
+                                <h4>Ksh{car.name}</h4>
+                                <p>KshKsh{car.price.toLocaleString()} | Ksh{car.brand}</p>
                             </div>
                             <div class="car-list-actions">
-                                <button class="btn btn-primary edit-btn" data-car-id="${car.id}">Edit</button>
-                                <button class="btn btn-danger delete-btn" data-car-id="${car.id}">Delete</button>
+                                <button class="btn btn-primary edit-btn" data-car-id="Ksh{car.id}">Edit</button>
+                                <button class="btn btn-danger delete-btn" data-car-id="Ksh{car.id}">Delete</button>
                             </div>
                         `;
                         carsList.appendChild(carItem);
@@ -324,7 +324,7 @@
 
             async function editCar(carId) {
                 try {
-                    const response = await fetch(`${API_URL}/${carId}`);
+                    const response = await fetch(`Ksh{API_URL}/Ksh{carId}`);
                     const car = await response.json();
 
                     document.getElementById('carName').value = car.name;
@@ -364,7 +364,7 @@
                 }
 
                 try {
-                    const response = await fetch(`${API_URL}/${carId}`, {
+                    const response = await fetch(`Ksh{API_URL}/Ksh{carId}`, {
                         method: 'PUT',
                         body: formData
                     });
@@ -387,7 +387,7 @@
             async function deleteCar(carId) {
                 if (confirm('Are you sure you want to delete this car?')) {
                     try {
-                        const response = await fetch(`${API_URL}/${carId}`, {
+                        const response = await fetch(`Ksh{API_URL}/Ksh{carId}`, {
                             method: 'DELETE'
                         });
                         if (response.ok) {

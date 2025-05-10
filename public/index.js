@@ -108,7 +108,7 @@ async function renderCarListings() {
   try {
     const response = await fetch(API_URL);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}, text: ${await response.text()}`);
+      throw new Error(`HTTP error! status: Ksh{response.status}, text: Ksh{await response.text()}`);
     }
     const cars = await response.json();
     carListing.innerHTML = '';
@@ -127,17 +127,17 @@ async function renderCarListings() {
       const carCard = document.createElement('div');
       carCard.className = 'car-card';
       carCard.innerHTML = `
-        <img src="${car.images[0]}" alt="${car.name}" class="car-image">
+        <img src="Ksh{car.images[0]}" alt="Ksh{car.name}" class="car-image">
         <div class="car-details">
-          <h3 class="car-title">${car.name}</h3>
-          <div class="car-price">$${car.price.toLocaleString()}</div>
+          <h3 class="car-title">Ksh{car.name}</h3>
+          <div class="car-price">KshKsh{car.price.toLocaleString()}</div>
           <div class="car-specs">
-            <div class="car-spec"><i class="fas fa-tachometer-alt"></i> ${car.mileage}</div>
-            <div class="car-spec"><i class="fas fa-calendar-alt"></i> ${car.year}</div>
-            <div class="car-spec"><i class="fas fa-car"></i> ${car.brand}</div>
+            <div class="car-spec"><i class="fas fa-tachometer-alt"></i> Ksh{car.mileage}</div>
+            <div class="car-spec"><i class="fas fa-calendar-alt"></i> Ksh{car.year}</div>
+            <div class="car-spec"><i class="fas fa-car"></i> Ksh{car.brand}</div>
           </div>
-          <p class="car-description">${car.description.substring(0, 100)}...</p>
-          <a href="#" class="view-btn" data-car-id="${car.id}">View Details</a>
+          <p class="car-description">Ksh{car.description.substring(0, 100)}...</p>
+          <a href="#" class="view-btn" data-car-id="Ksh{car.id}">View Details</a>
         </div>
       `;
       carListing.appendChild(carCard);
@@ -158,15 +158,15 @@ async function renderCarListings() {
 
 async function showCarDetail(carId) {
   try {
-    const response = await fetch(`${API_URL}/${carId}`);
+    const response = await fetch(`Ksh{API_URL}/Ksh{carId}`);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}, text: ${await response.text()}`);
+      throw new Error(`HTTP error! status: Ksh{response.status}, text: Ksh{await response.text()}`);
     }
     const car = await response.json();
 
     currentCarId = carId;
     document.querySelector('.car-name').textContent = car.name;
-    document.querySelector('.detail-price').textContent = `$${car.price.toLocaleString()}`;
+    document.querySelector('.detail-price').textContent = `KshKsh{car.price.toLocaleString()}`;
     document.getElementById('detailBrand').textContent = car.brand;
     document.getElementById('detailYear').textContent = car.year;
     document.getElementById('detailDescription').textContent = car.description;
@@ -188,9 +188,9 @@ async function showCarDetail(carId) {
 
 function changeImage(direction) {
   if (!currentCarId || !detailCarImage) return;
-  fetch(`${API_URL}/${currentCarId}`)
+  fetch(`Ksh{API_URL}/Ksh{currentCarId}`)
     .then(response => {
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) throw new Error(`HTTP error! status: Ksh{response.status}`);
       return response.json();
     })
     .then(car => {
