@@ -16,6 +16,10 @@
       "dest": "server.js"
     },
     {
+      "src": "/car/(.*)",
+      "dest": "server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "server.js"
     }

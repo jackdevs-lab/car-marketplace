@@ -19,6 +19,8 @@ model Car {
   description  String
   phone        String
   transmission String
+  fuelType     String
+  location     String
   engine       String
   images       String[]
   createdAt    DateTime @default(now())

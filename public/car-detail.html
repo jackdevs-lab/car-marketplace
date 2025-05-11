@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Details - AutoElite</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .car-detail-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .car-image-slider {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .car-image-container {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .car-image {
+            width: 100%;
+            max-height: 450px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            border-radius: 4px;
+        }
+
+        .slider-btn.prev {
+            left: 10px;
+        }
+
+        .slider-btn.next {
+            right: 10px;
+        }
+
+        .fullscreen-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .fullscreen-image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .fullscreen-image img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .close-fullscreen {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .fullscreen-slider-btn {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+            font-size: 2rem;
+            border-radius: 4px;
+        }
+
+        .fullscreen-slider-btn.prev {
+            position: absolute;
+            left: 20px;
+        }
+
+        .fullscreen-slider-btn.next {
+            position: absolute;
+            right: 20px;
+        }
+
+        .car-details-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .car-details-list li {
+            padding: 0.5rem 0;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .car-details-list li:last-child {
+            border-bottom: none;
+        }
+
+        .car-details-list li i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .btn-back:hover {
+            background-color: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            .car-image-slider {
+                max-width: 100%;
+            }
+
+            .car-image {
+                max-height: 300px;
+            }
+
+            .car-details-list li {
+                font-size: 1rem;
+            }
+
+            .slider-btn {
+                padding: 0.3rem 0.7rem;
+                font-size: 1.2rem;
+            }
+
+            .fullscreen-slider-btn {
+                padding: 0.5rem;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">Auto<span>Elite</span></a>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/">Cars</a></li>
+                <li><a href="/" onclick="alert('Contact us at: info@autoelite.com'); return false;">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="car-detail-container">
+        <a href="/" class="btn-back">Back to Listings</a>
+        <div class="car-image-slider" id="carImageSlider">
+            <div class="car-image-container" id="carImageContainer"></div>
+            <button class="slider-btn prev" id="prevBtn">&#10094;</button>
+            <button class="slider-btn next" id="nextBtn">&#10095;</button>
+        </div>
+        <ul class="car-details-list" id="carDetails">
+            <li><i class="fas fa-car"></i> <span id="carName"></span></li>
+            <li><i class="fas fa-road"></i> <span id="carTransmission"></span></li>
+            <li><i class="fas fa-tachometer-alt"></i> <span id="carMileage"></span></li>
+            <li><i class="fas fa-gas-pump"></i> <span id="carFuelType"></span></li>
+            <li><i class="fas fa-map-marker-alt"></i> <span id="carLocation"></span></li>
+            <li><i class="fas fa-tag"></i> <span id="carPrice"></span></li>
+            <li><i class="fas fa-paint-roller"></i> <span id="carColor"></span></li>
+            <li><i class="fas fa-calendar-alt"></i> <span id="carYear"></span></li>
+            <li><i class="fas fa-cogs"></i> <span id="carEngine"></span></li>
+            <li><i class="fas fa-info-circle"></i> <span id="carDescription"></span></li>
+            <li><i class="fas fa-phone"></i> <span id="carPhone"></span></li>
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const carId = window.location.pathname.split('/').pop();
+            const API_URL = '/api/cars';
+            let images = [];
+            let currentIndex = 0;
+
+            const carImageContainer = document.getElementById('carImageContainer');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            try {
+                const response = await fetch(`${API_URL}/${carId}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const car = await response.json();
+
+                // Populate car details
+                document.getElementById('carName').textContent = car.name;
+                document.getElementById('carTransmission').textContent = car.transmission;
+                document.getElementById('carMileage').textContent = car.mileage;
+                document.getElementById('carFuelType').textContent = car.fuelType;
+                document.getElementById('carLocation').textContent = car.location;
+                document.getElementById('carPrice').textContent = `Ksh${car.price.toLocaleString()}`;
+                document.getElementById('carColor').textContent = car.color;
+                document.getElementById('carYear').textContent = car.year;
+                document.getElementById('carEngine').textContent = car.engine;
+                document.getElementById('carDescription').textContent = car.description;
+                document.getElementById('carPhone').textContent = car.phone;
+
+                // Load images into slider
+                images = car.images || [];
+                if (images.length === 0) {
+                    carImageContainer.innerHTML = '<img src="" alt="No Image Available" class="car-image">';
+                    return;
+                }
+
+                images.forEach((src, index) => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = `Car Image ${index + 1}`;
+                    img.className = 'car-image';
+                    carImageContainer.appendChild(img);
+                });
+
+                // Adjust container width based on number of images
+                carImageContainer.style.width = `${images.length * 100}%`;
+
+                // Show first image
+                updateSlider();
+
+                // Slider navigation
+                prevBtn.addEventListener('click', () => {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                    updateSlider();
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    updateSlider();
+                });
+
+                // Fullscreen functionality
+                carImageContainer.querySelectorAll('.car-image').forEach(img => {
+                    img.addEventListener('click', () => {
+                        const fullscreenDiv = document.createElement('div');
+                        fullscreenDiv.className = 'fullscreen-image';
+                        fullscreenDiv.innerHTML = `
+                            <div class="fullscreen-image-container">
+                                <span class="close-fullscreen">×</span>
+                                <button class="fullscreen-slider-btn prev">&#10094;</button>
+                                <img src="${images[currentIndex]}" alt="Car Image">
+                                <button class="fullscreen-slider-btn next">&#10095;</button>
+                            </div>
+                        `;
+                        document.body.appendChild(fullscreenDiv);
+
+                        const fullscreenImg = fullscreenDiv.querySelector('img');
+                        const fullscreenPrevBtn = fullscreenDiv.querySelector('.fullscreen-slider-btn.prev');
+                        const fullscreenNextBtn = fullscreenDiv.querySelector('.fullscreen-slider-btn.next');
+
+                        fullscreenPrevBtn.addEventListener('click', () => {
+                            currentIndex = (currentIndex - 1 + images.length) % images.length;
+                            fullscreenImg.src = images[currentIndex];
+                        });
+
+                        fullscreenNextBtn.addEventListener('click', () => {
+                            currentIndex = (currentIndex + 1) % images.length;
+                            fullscreenImg.src = images[currentIndex];
+                        });
+
+                        fullscreenDiv.querySelector('.close-fullscreen').addEventListener('click', () => {
+                            fullscreenDiv.remove();
+                        });
+                    });
+                });
+
+                function updateSlider() {
+                    const offset = -currentIndex * (100 / images.length);
+                    carImageContainer.style.transform = `translateX(${offset}%)`;
+                }
+            } catch (error) {
+                console.error('Error fetching car details:', error);
+                document.getElementById('carDetails').innerHTML = '<li>Error loading car details</li>';
+            }
+        });
+    </script>
+</body>
+</html> 

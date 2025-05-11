@@ -189,6 +189,28 @@
                     <input type="text" id="carColor" class="form-control" required>
                 </div>
                 <div class="form-group">
+                    <label for="carTransmission" class="form-label">Transmission</label>
+                    <select id="carTransmission" class="form-control" required>
+                        <option value="">Select Transmission</option>
+                        <option value="Automatic">Automatic</option>
+                        <option value="Manual">Manual</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="carFuelType" class="form-label">Fuel Type</label>
+                    <select id="carFuelType" class="form-control" required>
+                        <option value="">Select Fuel Type</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Electric</option>
+                        <option value="Hybrid">Hybrid</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="carLocation" class="form-label">Location</label>
+                    <input type="text" id="carLocation" class="form-control" required>
+                </div>
+                <div class="form-group">
                     <label for="carDescription" class="form-label">Description</label>
                     <textarea id="carDescription" class="form-control" rows="3" required></textarea>
                 </div>
@@ -252,6 +274,7 @@
                                 <h4>${car.name}</h4>
                                 <p>Ksh${car.price.toLocaleString()} | ${car.brand}</p>
                             </div>
+pink
                             <div class="car-list-actions">
                                 <button class="btn btn-primary edit-btn" data-car-id="${car.id}">Edit</button>
                                 <button class="btn btn-danger delete-btn" data-car-id="${car.id}">Delete</button>
@@ -287,9 +310,11 @@
                 formData.append('mileage', document.getElementById('carMileage').value);
                 formData.append('year', document.getElementById('carYear').value);
                 formData.append('color', document.getElementById('carColor').value);
+                formData.append('transmission', document.getElementById('carTransmission').value);
+                formData.append('fuelType', document.getElementById('carFuelType').value);
+                formData.append('location', document.getElementById('carLocation').value);
                 formData.append('description', document.getElementById('carDescription').value);
                 formData.append('phone', document.getElementById('sellerPhone').value);
-                formData.append('transmission', 'Automatic');
                 formData.append('engine', '2.0L');
                 const imageFiles = document.getElementById('carImages').files;
                 console.log('Image files:', imageFiles);
@@ -333,6 +358,9 @@
                     document.getElementById('carMileage').value = car.mileage;
                     document.getElementById('carYear').value = car.year;
                     document.getElementById('carColor').value = car.color;
+                    document.getElementById('carTransmission').value = car.transmission;
+                    document.getElementById('carFuelType').value = car.fuelType;
+                    document.getElementById('carLocation').value = car.location;
                     document.getElementById('carDescription').value = car.description;
                     document.getElementById('sellerPhone').value = car.phone;
 
@@ -352,9 +380,11 @@
                 formData.append('mileage', document.getElementById('carMileage').value);
                 formData.append('year', document.getElementById('carYear').value);
                 formData.append('color', document.getElementById('carColor').value);
+                formData.append('transmission', document.getElementById('carTransmission').value);
+                formData.append('fuelType', document.getElementById('carFuelType').value);
+                formData.append('location', document.getElementById('carLocation').value);
                 formData.append('description', document.getElementById('carDescription').value);
                 formData.append('phone', document.getElementById('sellerPhone').value);
-                formData.append('transmission', 'Automatic');
                 formData.append('engine', '2.0L');
                 const imageFiles = document.getElementById('carImages').files;
                 if (imageFiles.length > 0) {

@@ -1,3 +1,4 @@
+/* CSS Variables */
 :root {
     --primary: #2c3e50;
     --secondary: #3498db;
@@ -7,6 +8,7 @@
     --gray: #95a5a6;
 }
 
+/* Global Reset and Typography */
 * {
     margin: 0;
     padding: 0;
@@ -15,10 +17,12 @@
 }
 
 body {
-    background-color: #f5f5f5;
+    background-color: var(--light);
     color: var(--dark);
+    line-height: 1.6;
 }
 
+/* Header */
 header {
     background-color: var(--primary);
     color: white;
@@ -28,57 +32,10 @@ header {
     align-items: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
-/* Existing styles remain unchanged */
-
-/* Slider Styles */
-.detail-slider {
-    position: relative;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    overflow: hidden;
-  }
-  
-  .slider-container {
-    position: relative;
-    width: 100%;
-    height: 400px;
-  }
-  
-  .detail-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  
-  .slider-prev, .slider-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 10;
-  }
-  
-  .slider-prev {
-    left: 10px;
-  }
-  
-  .slider-next {
-    right: 10px;
-  }
-  
-  .slider-prev:hover, .slider-next:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
 
 .logo {
     font-size: 1.8rem;
-    font-weight: bold;
+    font-weight: 700;
     color: white;
     text-decoration: none;
 }
@@ -90,6 +47,7 @@ header {
 nav ul {
     display: flex;
     list-style: none;
+    align-items: center;
 }
 
 nav ul li {
@@ -100,13 +58,14 @@ nav ul li a {
     color: white;
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s;
+    transition: color 0.3s ease;
 }
 
 nav ul li a:hover {
     color: var(--secondary);
 }
 
+/* Container and Layout */
 .container {
     max-width: 1200px;
     margin: 2rem auto;
@@ -124,47 +83,6 @@ nav ul li a:hover {
     flex-wrap: wrap;
     gap: 1rem;
 }
-.brand-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 0.5rem;
-}
-
-.brand-card {
-    background-color: var(--light);
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.brand-card:hover {
-    background-color: var(--secondary);
-    border-color: var(--secondary);
-    transform: scale(1.05);
-}
-
-.brand-card img {
-    max-width: 60px;
-    max-height: 40px;
-    object-fit: contain;
-}
-
-.brand-card.selected {
-    background-color: var(--secondary);
-    border-color: var(--secondary);
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-}
-
-.brand-card span {
-    font-size: 0.9rem;
-    color: var(--dark);
-    text-align: center;
-}
 
 .filter-group {
     flex: 1;
@@ -175,16 +93,51 @@ nav ul li a:hover {
     margin-bottom: 0.5rem;
     font-size: 1rem;
     color: var(--dark);
+    font-weight: 600;
 }
 
-.price-dropdown {
+/* Dropdown Styles */
+.price-dropdown, .brand-dropdown {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--gray);
     border-radius: 4px;
     font-size: 1rem;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%232c3e50' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 12px;
 }
 
+.brand-dropdown {
+    color: var(--dark);
+}
+
+.price-dropdown:hover, .brand-dropdown:hover {
+    border-color: var(--secondary);
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.price-dropdown:focus, .brand-dropdown:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+@media (max-width: 768px) {
+    .price-dropdown, .brand-dropdown {
+        font-size: 0.9rem;
+        padding: 0.6rem;
+        background-size: 10px;
+        background-position: right 0.6rem center;
+    }
+}
+
+/* Car Grid and Cards */
 .cars-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -196,7 +149,7 @@ nav ul li a:hover {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .car-card:hover {
@@ -205,8 +158,8 @@ nav ul li a:hover {
 }
 
 .car-image {
-    height: 200px;
     width: 100%;
+    height: 200px;
     object-fit: cover;
 }
 
@@ -218,11 +171,12 @@ nav ul li a:hover {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
     color: var(--dark);
+    font-weight: 600;
 }
 
 .car-price {
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 700;
     color: var(--secondary);
     margin-bottom: 1rem;
 }
@@ -250,11 +204,11 @@ nav ul li a:hover {
     display: inline-block;
     background-color: var(--primary);
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.5rem;
     border-radius: 4px;
     text-decoration: none;
     font-weight: 500;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 .view-btn:hover {
@@ -263,93 +217,159 @@ nav ul li a:hover {
 
 /* Car Detail Page */
 .car-detail-container {
+    max-width: 1000px;
+    margin: 2rem auto;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
+    padding: 1.5rem;
 }
 
-.car-image-large {
+.car-image-slider {
+    position: relative;
     width: 100%;
-    height: 400px;
-    object-fit: cover;
-}
-
-.car-info {
-    padding: 2rem;
-}
-
-.car-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1.5rem;
-}
-
-.car-name {
-    font-size: 1.8rem;
-    color: var(--dark);
-}
-
-.detail-price {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: var(--secondary);
-}
-
-.car-meta {
-    display: flex;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-    color: var(--gray);
-}
-
-.car-description {
-    margin-bottom: 2rem;
-    line-height: 1.6;
-}
-
-.specs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.spec-item {
-    background-color: var(--light);
-    padding: 1rem;
+    max-width: 700px;
+    margin: 0 auto;
+    overflow: hidden;
     border-radius: 4px;
 }
 
-.spec-title {
-    font-size: 0.9rem;
-    color: var(--gray);
-    margin-bottom: 0.3rem;
+.car-image-container {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
 }
 
-.spec-value {
-    font-weight: 500;
-    color: var(--dark);
+.car-image {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    cursor: pointer;
 }
 
-.seller-info {
-    background-color: var(--light);
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-top: 2rem;
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    border-radius: 4px;
+    z-index: 10;
 }
 
-.seller-title {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    color: var(--dark);
+.slider-btn.prev {
+    left: 10px;
 }
 
-.seller-phone {
-    font-size: 1.2rem;
-    font-weight: bold;
+.slider-btn.next {
+    right: 10px;
+}
+
+.slider-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.fullscreen-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.fullscreen-image-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.fullscreen-image img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.close-fullscreen {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.fullscreen-slider-btn {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    font-size: 2rem;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.fullscreen-slider-btn.prev {
+    position: absolute;
+    left: 20px;
+}
+
+.fullscreen-slider-btn.next {
+    position: absolute;
+    right: 20px;
+}
+
+.fullscreen-slider-btn:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.car-details-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.car-details-list li {
+    padding: 0.75rem 0;
+    font-size: 1.1rem;
+    border-bottom: 1px solid var(--light);
+    display: flex;
+    align-items: center;
+}
+
+.car-details-list li:last-child {
+    border-bottom: none;
+}
+
+.car-details-list li i {
+    margin-right: 0.5rem;
     color: var(--secondary);
+}
+
+.btn-back {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: var(--secondary);
 }
 
 /* Admin Panel */
@@ -368,6 +388,7 @@ nav ul li a:hover {
     color: var(--dark);
     border-bottom: 2px solid var(--secondary);
     padding-bottom: 0.5rem;
+    font-weight: 600;
 }
 
 .form-group {
@@ -384,14 +405,16 @@ nav ul li a:hover {
 .form-control {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--gray);
     border-radius: 4px;
     font-size: 1rem;
+    transition: border-color 0.3s ease;
 }
 
 .form-control:focus {
     outline: none;
     border-color: var(--secondary);
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
 .btn {
@@ -401,7 +424,7 @@ nav ul li a:hover {
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 .btn-primary {
@@ -431,7 +454,7 @@ nav ul li a:hover {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--light);
 }
 
 .car-list-item:last-child {
@@ -440,6 +463,7 @@ nav ul li a:hover {
 
 .car-list-info h4 {
     margin-bottom: 0.5rem;
+    color: var(--dark);
 }
 
 .car-list-actions {
@@ -456,7 +480,7 @@ nav ul li a:hover {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 100;
+    z-index: 1000;
     justify-content: center;
     align-items: center;
 }
@@ -467,12 +491,14 @@ nav ul li a:hover {
     border-radius: 8px;
     width: 100%;
     max-width: 400px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .modal-title {
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
     color: var(--dark);
+    font-weight: 600;
 }
 
 .close-btn {
@@ -481,9 +507,15 @@ nav ul li a:hover {
     right: 1rem;
     font-size: 1.5rem;
     cursor: pointer;
+    color: var(--gray);
+    transition: color 0.3s ease;
 }
 
-/* Responsive */
+.close-btn:hover {
+    color: var(--accent);
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -492,19 +524,39 @@ nav ul li a:hover {
 
     nav ul {
         margin-top: 1rem;
+        flex-direction: column;
+        align-items: center;
     }
 
     nav ul li {
-        margin-left: 1rem;
-        margin-right: 1rem;
+        margin: 0.5rem 0;
     }
 
-    .car-header {
+    .filters {
         flex-direction: column;
     }
 
-    .detail-price {
-        margin-top: 1rem;
+    .car-image {
+        height: 150px;
+    }
+
+    .car-detail-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .car-image {
+        max-height: 300px;
+    }
+
+    .slider-btn {
+        padding: 0.3rem 0.7rem;
+        font-size: 1.2rem;
+    }
+
+    .fullscreen-slider-btn {
+        padding: 0.5rem;
+        font-size: 1.5rem;
     }
 }
 

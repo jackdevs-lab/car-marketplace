@@ -49,6 +49,12 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Car detail route
+app.get('/car/:id', (req, res) => {
+  console.log('Serving car-detail.html');
+  res.sendFile(path.join(__dirname, 'public', 'car-detail.html'));
+});
+
 // Multer configuration for temporary file storage
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -65,7 +71,7 @@ const authMiddleware = (req, res, next) => {
 app.get('/api/cars', async (req, res) => {
   try {
     const cars = await prisma.car.findMany();
-    console.log('Fetched cars:', cars); // Add log to verify data
+    console.log('Fetched cars:', cars);
     res.json(cars);
   } catch (error) {
     console.error('Error fetching cars:', error);
@@ -89,7 +95,7 @@ app.get('/api/cars/:id', async (req, res) => {
 
 app.post('/api/cars', upload.array('images', 10), async (req, res) => {
   try {
-    const { name, brand, price, mileage, year, color, description, phone, transmission, engine } = req.body;
+    const { name, brand, price, mileage, year, color, description, phone, transmission, fuelType, location, engine } = req.body;
 
     const uploadPromises = req.files.map(file =>
       new Promise((resolve, reject) => {
@@ -113,6 +119,8 @@ app.post('/api/cars', upload.array('images', 10), async (req, res) => {
         description,
         phone,
         transmission,
+        fuelType,
+        location,
         engine,
         images: imageUrls,
       },
@@ -127,7 +135,7 @@ app.post('/api/cars', upload.array('images', 10), async (req, res) => {
 app.put('/api/cars/:id', upload.array('images', 10), async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, brand, price, mileage, year, color, description, phone, transmission, engine } = req.body;
+    const { name, brand, price, mileage, year, color, description, phone, transmission, fuelType, location, engine } = req.body;
 
     let imageUrls;
     if (req.files && req.files.length > 0) {
@@ -154,6 +162,8 @@ app.put('/api/cars/:id', upload.array('images', 10), async (req, res) => {
         description,
         phone,
         transmission,
+        fuelType,
+        location,
         engine,
         images: imageUrls || undefined,
       },
