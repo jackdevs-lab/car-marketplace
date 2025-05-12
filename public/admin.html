@@ -148,6 +148,26 @@
         .logout-link:hover {
             text-decoration: underline;
         }
+
+        .feedback-message {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+            text-align: center;
+        }
+
+        .feedback-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .feedback-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -155,6 +175,7 @@
         <div class="admin-panel">
             <a href="/logout" class="logout-link">Logout</a>
             <h2 class="admin-title">Admin Dashboard</h2>
+            <div id="feedbackMessage" class="feedback-message"></div>
             <form id="carForm">
                 <div class="form-group">
                     <label for="carName" class="form-label">Car Name</label>
@@ -236,10 +257,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             const carForm = document.getElementById('carForm');
             const carsList = document.getElementById('carsList');
+            const feedbackMessage = document.getElementById('feedbackMessage');
             const API_URL = '/api/cars';
 
-            if (!carForm || !carsList) {
-                console.error('carForm or carsList not found in DOM');
+            if (!carForm || !carsList || !feedbackMessage) {
+                console.error('Required elements not found in DOM');
                 return;
             }
 
@@ -274,7 +296,6 @@
                                 <h4>${car.name}</h4>
                                 <p>Ksh${car.price.toLocaleString()} | ${car.brand}</p>
                             </div>
-pink
                             <div class="car-list-actions">
                                 <button class="btn btn-primary edit-btn" data-car-id="${car.id}">Edit</button>
                                 <button class="btn btn-danger delete-btn" data-car-id="${car.id}">Delete</button>
@@ -304,46 +325,80 @@ pink
 
             async function addNewCar() {
                 const formData = new FormData();
-                formData.append('name', document.getElementById('carName').value);
-                formData.append('brand', document.getElementById('carBrand').value);
-                formData.append('price', document.getElementById('carPrice').value);
-                formData.append('mileage', document.getElementById('carMileage').value);
-                formData.append('year', document.getElementById('carYear').value);
-                formData.append('color', document.getElementById('carColor').value);
-                formData.append('transmission', document.getElementById('carTransmission').value);
-                formData.append('fuelType', document.getElementById('carFuelType').value);
-                formData.append('location', document.getElementById('carLocation').value);
-                formData.append('description', document.getElementById('carDescription').value);
-                formData.append('phone', document.getElementById('sellerPhone').value);
+                const requiredFields = {
+                    name: document.getElementById('carName').value.trim(),
+                    brand: document.getElementById('carBrand').value,
+                    price: document.getElementById('carPrice').value,
+                    mileage: document.getElementById('carMileage').value.trim(),
+                    year: document.getElementById('carYear').value,
+                    color: document.getElementById('carColor').value.trim(),
+                    transmission: document.getElementById('carTransmission').value,
+                    fuelType: document.getElementById('carFuelType').value,
+                    location: document.getElementById('carLocation').value.trim(),
+                    description: document.getElementById('carDescription').value.trim(),
+                    phone: document.getElementById('sellerPhone').value.trim()
+                };
+
+                // Validate required fields
+                for (let field in requiredFields) {
+                    if (!requiredFields[field]) {
+                        showFeedback(`Please fill in the ${field.replace('car', '').replace('seller', 'seller ').toLowerCase()} field.`, 'error');
+                        return;
+                    }
+                }
+
+                formData.append('name', requiredFields.name);
+                formData.append('brand', requiredFields.brand);
+                formData.append('price', requiredFields.price);
+                formData.append('mileage', requiredFields.mileage);
+                formData.append('year', requiredFields.year);
+                formData.append('color', requiredFields.color);
+                formData.append('transmission', requiredFields.transmission);
+                formData.append('fuelType', requiredFields.fuelType);
+                formData.append('location', requiredFields.location);
+                formData.append('description', requiredFields.description);
+                formData.append('phone', requiredFields.phone);
                 formData.append('engine', '2.0L');
+
                 const imageFiles = document.getElementById('carImages').files;
-                console.log('Image files:', imageFiles);
+                if (imageFiles.length > 10) {
+                    showFeedback('Please select up to 10 images only.', 'error');
+                    return;
+                }
+
                 if (imageFiles.length > 0) {
                     for (let file of imageFiles) {
+                        if (file.size > 5 * 1024 * 1024) { // 5MB limit per image
+                            showFeedback(`Image ${file.name} exceeds 5MB limit. Please compress it.`, 'error');
+                            return;
+                        }
                         formData.append('images', file);
-                        console.log('Appending file:', file.name);
+                        console.log('Appending file:', file.name, file.size);
                     }
                 } else {
-                    console.log('No image files selected');
+                    showFeedback('Please upload at least one image.', 'error');
+                    return;
                 }
 
                 try {
+                    showFeedback('Uploading car...', 'info');
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         body: formData
                     });
-                    const result = await response.json();
-                    if (response.ok) {
-                        carForm.reset();
-                        await renderAdminCarList();
-                        console.log('Car created successfully:', result);
-                    } else {
-                        console.error('API Error:', response.status, result);
-                        alert('Error adding car: ' + (result.error || 'Unknown error'));
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
                     }
+
+                    const result = await response.json();
+                    showFeedback('Car added successfully!', 'success');
+                    carForm.reset();
+                    await renderAdminCarList();
                 } catch (error) {
-                    console.error('Fetch error:', error);
-                    alert('Error adding car: Failed to fetch');
+                    console.error('Error adding car:', error);
+                    showFeedback(`Error adding car: ${error.message}`, 'error');
                 }
             }
 
@@ -368,7 +423,7 @@ pink
                     carForm.querySelector('button[type="submit"]').textContent = 'Update Car';
                 } catch (error) {
                     console.error('Error fetching car for edit:', error);
-                    alert('Error loading car data');
+                    showFeedback('Error loading car data', 'error');
                 }
             }
 
@@ -399,18 +454,18 @@ pink
                         body: formData
                     });
                     if (response.ok) {
+                        showFeedback('Car updated successfully!', 'success');
                         carForm.reset();
                         carForm.querySelector('button[type="submit"]').textContent = 'Add Car';
                         carForm.removeAttribute('data-editId');
                         await renderAdminCarList();
                     } else {
-                        const result = await response.json();
-                        console.error('API Error:', response.status, result);
-                        alert('Error updating car: ' + (result.error || 'Unknown error'));
+                        const errorText = await response.text();
+                        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
                     }
                 } catch (error) {
                     console.error('Error updating car:', error);
-                    alert('Error updating car: ' + error.message);
+                    showFeedback(`Error updating car: ${error.message}`, 'error');
                 }
             }
 
@@ -421,17 +476,26 @@ pink
                             method: 'DELETE'
                         });
                         if (response.ok) {
+                            showFeedback('Car deleted successfully!', 'success');
                             await renderAdminCarList();
                         } else {
-                            const result = await response.json();
-                            console.error('API Error:', response.status, result);
-                            alert('Error deleting car: ' + (result.error || 'Unknown error'));
+                            const errorText = await response.text();
+                            throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
                         }
                     } catch (error) {
                         console.error('Error deleting car:', error);
-                        alert('Error deleting car: ' + error.message);
+                        showFeedback(`Error deleting car: ${error.message}`, 'error');
                     }
                 }
+            }
+
+            function showFeedback(message, type) {
+                feedbackMessage.textContent = message;
+                feedbackMessage.className = `feedback-message ${type}`;
+                setTimeout(() => {
+                    feedbackMessage.className = 'feedback-message';
+                    feedbackMessage.textContent = '';
+                }, 5000);
             }
 
             initAdmin();
