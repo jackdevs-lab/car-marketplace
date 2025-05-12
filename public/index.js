@@ -2,6 +2,8 @@ const mainContent = document.getElementById('mainContent');
 const carListing = document.getElementById('carListing');
 const priceDropdown = document.getElementById('priceDropdown');
 const brandDropdown = document.getElementById('brandDropdown');
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const navMenu = document.getElementById('navMenu');
 const homeLink = document.getElementById('homeLink');
 const carsLink = document.getElementById('carsLink');
 const contactLink = document.getElementById('contactLink');
@@ -22,22 +24,29 @@ function setupEventListeners() {
     renderCarListings();
   });
 
+  hamburgerBtn.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+  });
+
   homeLink.addEventListener('click', (e) => {
     e.preventDefault();
     carListing.classList.remove('hidden');
     renderCarListings();
+    navMenu.classList.remove('active');
   });
 
   carsLink.addEventListener('click', (e) => {
     e.preventDefault();
     carListing.classList.remove('hidden');
     renderCarListings();
+    navMenu.classList.remove('active');
   });
 
   contactLink.addEventListener('click', (e) => {
     e.preventDefault();
     carListing.classList.remove('hidden');
     alert('Contact us at: info@autoelite.com');
+    navMenu.classList.remove('active');
   });
 }
 
