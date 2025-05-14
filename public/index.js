@@ -43,11 +43,13 @@ function setupEventListeners() {
   });
 
   contactLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    carListing.classList.remove('hidden');
-    alert('Contact us at: info@autoelite.com');
-    navMenu.classList.remove('active');
-  });
+            // Remove e.preventDefault() to allow navigation
+            if (navMenu) {
+                navMenu.classList.remove('active');
+            }
+            // Optionally remove alert if not needed
+            // alert('Contact us at: info@autoelite.com');
+        });
 }
 
 async function renderCarListings() {

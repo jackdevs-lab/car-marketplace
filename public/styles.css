@@ -1,11 +1,11 @@
 /* CSS Variables */
 :root {
-    --primary: #2c3e50;
-    --secondary: #3498db;
-    --accent: #e74c3c;
-    --light: #ecf0f1;
-    --dark: #2c3e50;
-    --gray: #95a5a6;
+    --primary: #1a252f;
+    --secondary: #007bff;
+    --accent: #dc3545;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
 }
 
 /* Global Reset and Typography */
@@ -13,7 +13,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 body {
@@ -30,20 +30,23 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    position: relative; /* Ensure header is positioned for z-index */
-    z-index: 1000; /* Ensure header stays above dropdown */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1000;
 }
 
 .logo {
-    font-size: 1.8rem;
-    font-weight: 700;
+    font-size: 1.2rem;
+    font-weight: 500;
     color: white;
     text-decoration: none;
+    letter-spacing: 0.5px;
 }
 
 .logo span {
-    color: var(--secondary);
+    background: linear-gradient(45deg, #ffffff, var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /* Hamburger Menu */
@@ -57,7 +60,7 @@ header {
 }
 
 nav {
-    z-index: 999; /* Ensure nav dropdown is just below header but above content */
+    z-index: 999;
 }
 
 nav ul {
@@ -74,11 +77,12 @@ nav ul li a {
     color: white;
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 nav ul li a:hover {
     color: var(--secondary);
+    transform: scale(1.1);
 }
 
 /* Container and Layout */
@@ -89,10 +93,10 @@ nav ul li a:hover {
 }
 
 .filters {
-    background-color: white;
+    background-color: var(--light);
     padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
     display: flex;
     justify-content: space-between;
@@ -117,13 +121,13 @@ nav ul li a:hover {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid var(--gray);
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 1rem;
-    background-color: white;
+    background-color: var(--light);
     cursor: pointer;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%232c3e50' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23212529' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
     background-size: 12px;
@@ -132,13 +136,13 @@ nav ul li a:hover {
 
 .price-dropdown:hover, .brand-dropdown:hover {
     border-color: var(--secondary);
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
 .price-dropdown:focus, .brand-dropdown:focus {
     outline: none;
     border-color: var(--secondary);
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 /* Car Grid and Cards */
@@ -149,16 +153,16 @@ nav ul li a:hover {
 }
 
 .car-card {
-    background-color: white;
-    border-radius: 8px;
+    background-color: var(--light);
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .car-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .car-image {
@@ -209,23 +213,24 @@ nav ul li a:hover {
     background-color: var(--primary);
     color: white;
     padding: 0.75rem 1.5rem;
-    border-radius: 4px;
+    border-radius: 6px;
     text-decoration: none;
     font-weight: 500;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .view-btn:hover {
     background-color: var(--secondary);
+    transform: scale(1.05);
 }
 
 /* Car Detail Page */
 .car-detail-container {
     max-width: 1000px;
     margin: 2rem auto;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    background-color: var(--light);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
 }
 
@@ -235,7 +240,7 @@ nav ul li a:hover {
     max-width: 700px;
     margin: 0 auto;
     overflow: hidden;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 .car-image-container {
@@ -260,7 +265,7 @@ nav ul li a:hover {
     padding: 0.5rem 1rem;
     cursor: pointer;
     font-size: 1.5rem;
-    border-radius: 4px;
+    border-radius: 6px;
     z-index: 10;
 }
 
@@ -273,7 +278,7 @@ nav ul li a:hover {
 }
 
 .slider-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: var(--secondary);
 }
 
 .fullscreen-image {
@@ -320,7 +325,7 @@ nav ul li a:hover {
     padding: 1rem;
     cursor: pointer;
     font-size: 2rem;
-    border-radius: 4px;
+    border-radius: 6px;
     z-index: 10;
 }
 
@@ -368,21 +373,22 @@ nav ul li a:hover {
     background-color: var(--primary);
     color: white;
     text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .btn-back:hover {
     background-color: var(--secondary);
+    transform: scale(1.05);
 }
 
 /* Admin Panel */
 .admin-panel {
     display: none;
-    background-color: white;
+    background-color: var(--light);
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
 }
 
@@ -410,25 +416,25 @@ nav ul li a:hover {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid var(--gray);
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 1rem;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-control:focus {
     outline: none;
     border-color: var(--secondary);
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
 .btn {
     padding: 0.75rem 1.5rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .btn-primary {
@@ -437,7 +443,8 @@ nav ul li a:hover {
 }
 
 .btn-primary:hover {
-    background-color: #2980b9;
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
 
 .btn-danger {
@@ -446,7 +453,8 @@ nav ul li a:hover {
 }
 
 .btn-danger:hover {
-    background-color: #c0392b;
+    background-color: #a71d2a;
+    transform: scale(1.05);
 }
 
 .cars-list {
@@ -490,9 +498,9 @@ nav ul li a:hover {
 }
 
 .modal-content {
-    background-color: white;
+    background-color: var(--light);
     padding: 2rem;
-    border-radius: 8px;
+    border-radius: 10px;
     width: 100%;
     max-width: 400px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -532,9 +540,9 @@ nav ul li a:hover {
         position: absolute;
         top: 100%;
         left: 0;
-        background-color: rgba(44, 62, 80, 0.9); /* Semi-transparent background using --primary */
-        padding: 0.5rem 0; /* Reduced padding for a smaller menu */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background-color: rgba(26, 37, 47, 0.95);
+        padding: 0.5rem 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     nav.active {
@@ -547,28 +555,21 @@ nav ul li a:hover {
     }
 
     nav ul li {
-        margin: 0.3rem 0; /* Reduced margin for a more compact menu */
+        margin: 0.5rem 0;
     }
 
     nav ul li a {
-        font-size: 1rem; /* Slightly smaller font size for compactness */
-        padding: 0.3rem 1rem; /* Reduced padding */
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
         display: block;
     }
 
     /* Dropdown Adjustments */
     .price-dropdown, .brand-dropdown {
         font-size: 0.9rem;
-        padding: 0.6rem 2rem 0.6rem 0.6rem;
+        padding: 0.6rem;
         background-size: 10px;
         background-position: right 0.6rem center;
-        border-radius: 6px;
-        border: 1px solid var(--gray);
-        background-color: var(--light);
-        color: var(--dark);
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
     }
 
     .filters {

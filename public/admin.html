@@ -232,6 +232,10 @@
                     <input type="text" id="carLocation" class="form-control" required>
                 </div>
                 <div class="form-group">
+                    <label for="carEngine" class="form-label">Engine Size (e.g., 2.0L)</label>
+                    <input type="text" id="carEngine" class="form-control" required>
+                </div>
+                <div class="form-group">
                     <label for="carDescription" class="form-label">Description</label>
                     <textarea id="carDescription" class="form-control" rows="3" required></textarea>
                 </div>
@@ -335,6 +339,7 @@
                     transmission: document.getElementById('carTransmission').value,
                     fuelType: document.getElementById('carFuelType').value,
                     location: document.getElementById('carLocation').value.trim(),
+                    engine: document.getElementById('carEngine').value.trim(),
                     description: document.getElementById('carDescription').value.trim(),
                     phone: document.getElementById('sellerPhone').value.trim()
                 };
@@ -356,9 +361,9 @@
                 formData.append('transmission', requiredFields.transmission);
                 formData.append('fuelType', requiredFields.fuelType);
                 formData.append('location', requiredFields.location);
+                formData.append('engine', requiredFields.engine);
                 formData.append('description', requiredFields.description);
                 formData.append('phone', requiredFields.phone);
-                formData.append('engine', '2.0L');
 
                 const imageFiles = document.getElementById('carImages').files;
                 if (imageFiles.length > 10) {
@@ -416,6 +421,7 @@
                     document.getElementById('carTransmission').value = car.transmission;
                     document.getElementById('carFuelType').value = car.fuelType;
                     document.getElementById('carLocation').value = car.location;
+                    document.getElementById('carEngine').value = car.engine;
                     document.getElementById('carDescription').value = car.description;
                     document.getElementById('sellerPhone').value = car.phone;
 
@@ -438,9 +444,9 @@
                 formData.append('transmission', document.getElementById('carTransmission').value);
                 formData.append('fuelType', document.getElementById('carFuelType').value);
                 formData.append('location', document.getElementById('carLocation').value);
+                formData.append('engine', document.getElementById('carEngine').value);
                 formData.append('description', document.getElementById('carDescription').value);
                 formData.append('phone', document.getElementById('sellerPhone').value);
-                formData.append('engine', '2.0L');
                 const imageFiles = document.getElementById('carImages').files;
                 if (imageFiles.length > 0) {
                     for (let file of imageFiles) {

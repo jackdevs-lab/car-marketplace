@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cars by Wachira - Contact Us</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a252f;
+            --secondary: #007bff;
+            --accent: #dc3545;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --gradient: linear-gradient(135deg, #1a252f, #007bff);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: var(--gradient);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1000;
+        }
+
+        header .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #ffffff, #007bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        nav {
+            z-index: 999;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        .contact-section {
+            background: var(--light);
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            border: 1px solid var(--gray);
+            transition: transform 0.3s ease;
+        }
+
+        .contact-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .contact-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .contact-details {
+            margin-bottom: 2rem;
+        }
+
+        .contact-details p {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .social-icons a {
+            color: var(--secondary);
+            font-size: 1.8rem;
+            text-decoration: none;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent);
+            transform: scale(1.2);
+        }
+
+        .gmail-icon {
+            color: var(--secondary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .gmail-icon:hover {
+            color: var(--accent);
+            transform: scale(1.2);
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            header .logo {
+                font-size: 1.6rem;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            nav {
+                display: none;
+                width: 100%;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background-color: rgba(26, 37, 47, 0.95);
+                padding: 0.5rem 0;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            nav.active {
+                display: block;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin: 0.5rem 0;
+            }
+
+            nav ul li a {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+                display: block;
+            }
+
+            .contact-section {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+
+            .contact-text {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .contact-details p {
+                font-size: 1rem;
+            }
+
+            .social-icons {
+                gap: 1.2rem;
+            }
+
+            .social-icons a, .gmail-icon {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header .logo {
+                font-size: 1.2rem;
+                letter-spacing: 1px;
+            }
+
+            .contact-section {
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+
+            .contact-text {
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
+            }
+
+            .contact-details p {
+                font-size: 0.9rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .social-icons {
+                gap: 1rem;
+            }
+
+            .social-icons a, .gmail-icon {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">CARS BY WACHIRA</div>
+        <button class="hamburger" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html">Cars</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="contact-section">
+            <div class="contact-text">
+                Welcome to Cars by Wachira, your trusted source for premium vehicles in Kenya. Explore our exclusive range of luxury cars and experience unparalleled service. Reach out to us anytime—our team is available 24/7 to assist you.
+            </div>
+            <div class="contact-details">
+                <p><strong>Phone:</strong> 0790485506/0713600347</p>
+                <p><strong>Email:</strong> eryilnjagi.en@gmail.com</p>
+                <p><strong>Address:</strong> Nairobi, Kenya</p>
+            </div>
+            <div class="social-icons">
+                <a href="https://twitter.com/CarsByWachira" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://facebook.com/CarsByWachira" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://instagram.com/CarsByWachira" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com/company/CarsByWachira" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <a href="mailto:eryilnjagi.en@gmail.com?subject=Inquiry%20from%20Cars%20by%20Wachira%20Contact%20Page" class="gmail-icon">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const nav = document.querySelector('nav');
+
+            hamburger.addEventListener('click', () => {
+                nav.classList.toggle('active');
+            });
+
+            // Close nav when clicking a link
+            const navLinks = document.querySelectorAll('nav ul li a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    nav.classList.remove('active');
+                });
+            });
+
+            // Close nav when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+                    nav.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
