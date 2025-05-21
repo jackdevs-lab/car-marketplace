@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cars By Wachira</title>
+    <link rel="icon" type="image/png" href="images/logo.png" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">CARS BY WACHIRA</span></a>
+        <button class="hamburger" id="hamburgerBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav id="navMenu">
+            <ul>
+                <li><a href="/" id="homeLink">Home</a></li>
+                <li><a href="/" id="carsLink">Cars</a></li>
+                <li><a href="contact.html" id="contactLink">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div id="mainContent">
+            <div class="filters">
+                <div class="filter-group">
+                    <h3>Brand</h3>
+                    <select id="brandDropdown" class="brand-dropdown">
+                        <option value="All">All Brands</option>
+                        <option value="Toyota">Toyota</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Ford">Ford</option>
+                        <option value="BMW">BMW</option>
+                        <option value="Mercedes">Mercedes</option>
+                        <option value="Audi">Audi</option>
+                    </select>
+                </div><br>
+                <div class="filter-group">
+                    <h3>Price Range</h3>
+                    <select id="priceDropdown" class="price-dropdown">
+                        <option value="10000000">All Prices</option>
+                        <option value="1000000">Less than 1M</option>
+                        <option value="2000000">1M - 2M</option>
+                        <option value="3000000">2M - 3M</option>
+                        <option value="4000000">3M - 4M</option>
+                        <option value="5000000">4M - 5M</option>
+                        <option value="6000000">More than 5M</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="carListing" class="cars-grid">
+                <!-- Cars will be dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/index.js"></script>
+</body>
+</html>
