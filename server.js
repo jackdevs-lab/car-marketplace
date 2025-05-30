@@ -89,7 +89,8 @@ const authMiddleware = async (req, res, next) => {
 };
 
 // API Routes
-app.get('/api/cars', authMiddleware, async (req, res) => {
+// Public endpoint to fetch all cars
+app.get('/api/cars', async (req, res) => {
   try {
     const cars = await prisma.car.findMany();
     console.log('Fetched cars:', cars);
@@ -100,7 +101,8 @@ app.get('/api/cars', authMiddleware, async (req, res) => {
   }
 });
 
-app.get('/api/cars/:id', authMiddleware, async (req, res) => {
+// Public endpoint to fetch a single car by ID
+app.get('/api/cars/:id', async (req, res) => {
   try {
     const car = await prisma.car.findUnique({ where: { id: parseInt(req.params.id) } });
     if (car) {
