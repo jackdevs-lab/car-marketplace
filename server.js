@@ -1,14 +1,14 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
 const cors = require('cors');
 const path = require('path');
 const { PrismaClient } = require('@prisma/client');
 const multer = require('multer');
-const session = require('express-session');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const cloudinary = require('cloudinary').v2;
+const rateLimit = require('express-rate-limit');
 
-// Log server startup
 console.log('Starting server...');
 
 // Configure Cloudinary
@@ -20,19 +20,19 @@ cloudinary.config({
 
 const prisma = new PrismaClient();
 const port = process.env.PORT || 5000;
-
-// Session middleware
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: process.env.NODE_ENV === 'production' }
-}));
+const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Rate limiting for login endpoint
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit to 5 requests per window
+  message: 'Too many login attempts, please try again later.',
+});
 
 // Log incoming requests
 app.use((req, res, next) => {
@@ -55,20 +55,41 @@ app.get('/car/:id', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'car-detail.html'));
 });
 
+// Admin route
+app.get('/admin', (req, res) => {
+  console.log('Serving admin.html');
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
 // Multer configuration for temporary file storage
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Admin authentication middleware
-const authMiddleware = (req, res, next) => {
-  if (!req.session.isAdmin) {
-    console.log('User not authenticated, redirecting to login');
-    return res.redirect('/login');
+// JWT authentication middleware
+const authMiddleware = async (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) {
+    console.log('No authorization header provided');
+    return res.status(401).json({ error: 'No token provided' });
   }
-  next();
+
+  const token = authHeader.replace('Bearer ', '');
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await prisma.user.findUnique({ where: { id: decoded.userId } });
+    if (!user || !user.isAdmin) {
+      console.log('Invalid token or user is not admin');
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
+    req.user = user;
+    next();
+  } catch (error) {
+    console.error('Token verification failed:', error);
+    res.status(401).json({ error: 'Invalid token' });
+  }
 };
 
 // API Routes
-app.get('/api/cars', async (req, res) => {
+app.get('/api/cars', authMiddleware, async (req, res) => {
   try {
     const cars = await prisma.car.findMany();
     console.log('Fetched cars:', cars);
@@ -79,7 +100,7 @@ app.get('/api/cars', async (req, res) => {
   }
 });
 
-app.get('/api/cars/:id', async (req, res) => {
+app.get('/api/cars/:id', authMiddleware, async (req, res) => {
   try {
     const car = await prisma.car.findUnique({ where: { id: parseInt(req.params.id) } });
     if (car) {
@@ -93,9 +114,13 @@ app.get('/api/cars/:id', async (req, res) => {
   }
 });
 
-app.post('/api/cars', upload.array('images', 10), async (req, res) => {
+app.post('/api/cars', authMiddleware, upload.array('images', 10), async (req, res) => {
   try {
     const { name, brand, price, mileage, year, color, description, phone, transmission, fuelType, location, engine } = req.body;
+
+    if (!name || !brand || !price || !mileage || !year || !color || !description || !phone || !transmission || !fuelType || !location || !engine) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
 
     const uploadPromises = req.files.map(file =>
       new Promise((resolve, reject) => {
@@ -132,10 +157,14 @@ app.post('/api/cars', upload.array('images', 10), async (req, res) => {
   }
 });
 
-app.put('/api/cars/:id', upload.array('images', 10), async (req, res) => {
+app.put('/api/cars/:id', authMiddleware, upload.array('images', 10), async (req, res) => {
   try {
     const { id } = req.params;
     const { name, brand, price, mileage, year, color, description, phone, transmission, fuelType, location, engine } = req.body;
+
+    if (!name || !brand || !price || !mileage || !year || !color || !description || !phone || !transmission || !fuelType || !location || !engine) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
 
     let imageUrls;
     if (req.files && req.files.length > 0) {
@@ -175,7 +204,7 @@ app.put('/api/cars/:id', upload.array('images', 10), async (req, res) => {
   }
 });
 
-app.delete('/api/cars/:id', async (req, res) => {
+app.delete('/api/cars/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     await prisma.car.delete({ where: { id: parseInt(id) } });
@@ -187,34 +216,33 @@ app.delete('/api/cars/:id', async (req, res) => {
 });
 
 // Login Route
-app.get('/login', (req, res) => {
-  console.log('Serving login.html');
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
-
-app.post('/login', express.urlencoded({ extended: true }), (req, res) => {
+app.post('/api/login', loginLimiter, async (req, res) => {
   const { username, password } = req.body;
-  if (username === 'admin' && password === 'admin123') {
-    req.session.isAdmin = true;
-    console.log('Login successful, redirecting to admin');
-    res.redirect('/admin');
-  } else {
-    console.log('Login failed: Invalid credentials');
-    res.status(401).send('Invalid credentials');
+  if (!username || !password) {
+    console.log('Missing username or password');
+    return res.status(400).json({ error: 'Username and password are required' });
   }
-});
 
-app.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    console.log('Logged out, redirecting to login');
-    res.redirect('/login');
-  });
-});
+  try {
+    const user = await prisma.user.findUnique({ where: { username } });
+    if (!user || !user.isAdmin) {
+      console.log('User not found or not admin');
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
 
-// Admin Route
-app.get('/admin', authMiddleware, (req, res) => {
-  console.log('Serving admin.html');
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      console.log('Invalid password');
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    console.log('Login successful, token generated');
+    res.json({ token });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'Error during login' });
+  }
 });
 
 // Global error handler
