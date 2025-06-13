@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Details - CARS BY WACHIRA</title>
     <link rel="icon" type="image/png" href="images/logo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" nonce="random123">
     <link rel="stylesheet" href="/styles.css">
-    <style>
+    <style nonce="random123">
         .car-detail-container {
             max-width: 1000px;
             margin: 2rem auto;
@@ -32,7 +32,7 @@
 
         .car-image {
             width: 100%;
-            object-fit: contain; /* Adaptive sizing, no cropping */
+            object-fit: contain;
             cursor: pointer;
         }
 
@@ -154,7 +154,7 @@
             }
 
             .car-image {
-                max-height: 300px; /* Optional cap for mobile */
+                max-height: 300px;
             }
 
             .car-details-list li {
@@ -206,113 +206,7 @@
         </ul>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const carId = window.location.pathname.split('/').pop();
-            const API_URL = '/api/cars';
-            let images = [];
-            let currentIndex = 0;
-
-            const carImageContainer = document.getElementById('carImageContainer');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-
-            try {
-                const response = await fetch(`${API_URL}/${carId}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const car = await response.json();
-
-                // Populate car details
-                document.getElementById('carName').textContent = car.name;
-                document.getElementById('carTransmission').textContent = car.transmission;
-                document.getElementById('carMileage').textContent = car.mileage;
-                document.getElementById('carFuelType').textContent = car.fuelType;
-                document.getElementById('carLocation').textContent = car.location;
-                document.getElementById('carPrice').textContent = `Ksh${car.price.toLocaleString()}`;
-                document.getElementById('carColor').textContent = car.color;
-                document.getElementById('carYear').textContent = car.year;
-                document.getElementById('carEngine').textContent = car.engine;
-                document.getElementById('carDescription').textContent = car.description;
-                document.getElementById('carPhone').textContent = car.phone;
-
-                // Load images into slider
-                images = car.images || [];
-                if (images.length === 0) {
-                    carImageContainer.innerHTML = '<img src="" alt="No Image Available" class="car-image">';
-                    return;
-                }
-
-                images.forEach((src, index) => {
-                    const img = document.createElement('img');
-                    img.src = src;
-                    img.alt = `Car Image ${index + 1}`;
-                    img.className = 'car-image';
-                    carImageContainer.appendChild(img);
-                });
-
-                // Adjust container width based on number of images
-                carImageContainer.style.width = `${images.length * 100}%`;
-
-                // Show first image
-                updateSlider();
-
-                // Slider navigation
-                prevBtn.addEventListener('click', () => {
-                    currentIndex = (currentIndex - 1 + images.length) % images.length;
-                    updateSlider();
-                });
-
-                nextBtn.addEventListener('click', () => {
-                    currentIndex = (currentIndex + 1) % images.length;
-                    updateSlider();
-                });
-
-                // Fullscreen functionality
-                carImageContainer.querySelectorAll('.car-image').forEach(img => {
-                    img.addEventListener('click', () => {
-                        const fullscreenDiv = document.createElement('div');
-                        fullscreenDiv.className = 'fullscreen-image';
-                        fullscreenDiv.innerHTML = `
-                            <div class="fullscreen-image-container">
-                                <span class="close-fullscreen">×</span>
-                                <button class="fullscreen-slider-btn prev">❮</button>
-                                <img src="${images[currentIndex]}" alt="Car Image">
-                                <button class="fullscreen-slider-btn next">❯</button>
-                            </div>
-                        `;
-                        document.body.appendChild(fullscreenDiv);
-
-                        const fullscreenImg = fullscreenDiv.querySelector('img');
-                        const fullscreenPrevBtn = fullscreenDiv.querySelector('.fullscreen-slider-btn.prev');
-                        const fullscreenNextBtn = fullscreenDiv.querySelector('.fullscreen-slider-btn.next');
-
-                        fullscreenPrevBtn.addEventListener('click', () => {
-                            currentIndex = (currentIndex - 1 + images.length) % images.length;
-                            fullscreenImg.src = images[currentIndex];
-                        });
-
-                        fullscreenNextBtn.addEventListener('click', () => {
-                            currentIndex = (currentIndex + 1) % images.length;
-                            fullscreenImg.src = images[currentIndex];
-                        });
-
-                        fullscreenDiv.querySelector('.close-fullscreen').addEventListener('click', () => {
-                            fullscreenDiv.remove();
-                        });
-                    });
-                });
-
-                function updateSlider() {
-                    const offset = -currentIndex * (100 / images.length);
-                    carImageContainer.style.transform = `translateX(${offset}%)`;
-                }
-            } catch (error) {
-                console.error('Error fetching car details:', error);
-                document.getElementById('carDetails').innerHTML = '<li>Error loading car details</li>';
-            }
-        });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js" nonce="random123"></script>
+    <script src="/car-detail.js" nonce="random123" defer></script>
 </body>
 </html>
