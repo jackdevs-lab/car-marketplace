@@ -61,7 +61,7 @@ app.use(helmet({
 app.use(cookieParser());
 app.use(csrf({ cookie: { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict' } }));
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? 'https://yourdomain.com' : 'http://localhost:5000',
+  origin: process.env.NODE_ENV === 'production' ? 'https://car-marketplace-qkr3.vercel.app/' : 'http://localhost:5000',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'CSRF-Token', 'X-Requested-With']
