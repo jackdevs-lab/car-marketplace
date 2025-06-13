@@ -75,9 +75,9 @@ app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
-  if (process.env.NODE_ENV === 'production' && !req.secure) {
-    return res.redirect(`https://${req.headers.host}${req.url}`);
-  }
+  //if (process.env.NODE_ENV === 'production' && !req.secure) {
+   // return res.redirect(`https://${req.headers.host}${req.url}`);
+  //}
   logger.info(`Request: ${req.method} ${req.url}`);
   next();
 });
