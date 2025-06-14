@@ -42,7 +42,7 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'nonce-random123'", "https://cdnjs.cloudflare.com"], // Nonce will be dynamically set
+      scriptSrc: ["'self'", "'nonce-random123'", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net"], // Nonce will be dynamically set
       styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
       imgSrc: ["'self'", "https://res.cloudinary.com"],
       fontSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
